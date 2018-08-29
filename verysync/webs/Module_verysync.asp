@@ -148,11 +148,11 @@ function verifyFields(focused, quiet){
                                         <table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="verysync_detail">
                                             <tr>
 												<td>微力官网</td>
-												<td><a href="http://verysync.com/?s=merlin" target="_blank">http://verysync.com</a></td>
+												<td><a href="http://verysync.com/?sid=merlin" target="_blank">http://verysync.com</a></td>
 											</tr>
                                             <tr>
 												<td>微力社区</td>
-                                                <td><a href="http://forum.verysync.com/?s=merlin" target="_blank">http://forum.verysync.com</a></td>
+                                                <td><a href="http://forum.verysync.com/?sid=merlin" target="_blank">http://forum.verysync.com</a></td>
 											</tr>
                                             <tr>
 												<td>微信号</td>
