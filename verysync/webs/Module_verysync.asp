@@ -187,6 +187,12 @@ function verifyFields(focused, quiet){
 												</td>
 											</tr>
 											<tr>
+												<th>微力管理界面</th>
+												<td colspan="2">
+													<a  href="http://<% nvram_get("lan_ipaddr_rt");%>:<% dbus_get_def("verysync_port", "8886");%>" target="_blank">http://<% nvram_get("lan_ipaddr_rt");%>:<% dbus_get_def("verysync_port", "8886");%></a>
+												</td>
+											</tr>
+											<tr>
 												<td colspan="2">
 													<span style="float: left;">微力运行过程有可能占用较多内存，开启SWAP分区会更稳定，如果您已开启，请忽略此提示</span>
 												</td>
