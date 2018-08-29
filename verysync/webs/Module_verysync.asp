@@ -188,7 +188,7 @@ function verifyFields(focused, quiet){
 											</tr>
 											<tr>
 												<td colspan="2">
-													<span style="float: left;">微力运行过程有可能占用较多内存，开始SWAP分区会更稳定，如果您已开启，请忽略此提示</span>
+													<span style="float: left;">微力运行过程有可能占用较多内存，开启SWAP分区会更稳定，如果您已开启，请忽略此提示</span>
 												</td>
 											</tr>
                                     	</table>

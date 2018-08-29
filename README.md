@@ -4,4 +4,4 @@
 可以梅林离线安装上传安装
 
 预览:
-![image](http://github.com/verysync/verysync-merlin/raw/master/preview.png)
+![image](https://github.com/verysync/verysync-merlin/blob/master/preview.png?raw=true)
