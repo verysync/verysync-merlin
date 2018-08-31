@@ -28,6 +28,9 @@ get_ipaddr(){
 }
 
 start_verysync(){
+    if [ ! -L "/koolshare/init.d/S97verysync.sh" ]; then
+        ln -sf "/koolshare/scripts/verysync_config.sh" "/koolshare/init.d/S97verysync.sh"
+    fi
     export GOGC=30
     dbus set verysync_version=`/koolshare/verysync/verysync -version|awk '{print $2}'`
     $KSROOT/verysync/verysync -home="$verysync_home/.verysync" -gui-address $ipaddr >/dev/null 2>&1 &
@@ -47,8 +50,8 @@ start_verysync(){
 		fi
 		sleep 1
 	done
-    dbus set verysync_webui=$weburl
-    echo_date verysync启动成功，pid：$VSPID
+    dbus set verysync_webui="$weburl"
+    echo_date "verysync启动成功，pid：$VSPID"
 
 
 }
