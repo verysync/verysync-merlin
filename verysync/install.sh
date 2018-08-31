@@ -18,6 +18,10 @@ dbus set softcenter_module_verysync_title="微力同步"
 dbus set softcenter_module_verysync_description="自己的私有云"
 rm -rf $KSROOT/install.sh
 
+if [ ! -L "/koolshare/init.d/S97verysync.sh" ]; then
+    ln -sf "/koolshare/scripts/verysync_config.sh" "/koolshare/init.d/S97verysync.sh"
+fi
+
 dbus set verysync_version=`/koolshare/verysync/verysync -version|awk '{print $2}'`
 
 # sh $KSROOT/scripts/verysync_config.sh start
