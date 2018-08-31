@@ -160,7 +160,7 @@ function verifyFields(focused, quiet){
 											</tr>
 											<tr>
 												<td>QQ群</td>
-                                                <td>微力同步官方群: 530209771</td>
+                                                <td>微力同步官方群: 851608182</td>
 											</tr>
                                         </table>
                                         <table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
