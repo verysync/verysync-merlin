@@ -28,7 +28,7 @@ get_ipaddr(){
 start_verysync(){
     export GOGC=30
     dbus set verysync_version=`/koolshare/verysync/verysync -version|awk '{print $2}'`
-    $KSROOT/verysync/verysync -home="$verysync_home/.verysync" -gui-address $weburl >/dev/null 2>&1 &
+    $KSROOT/verysync/verysync -home="$verysync_home/.verysync" -gui-address $ipaddr >/dev/null 2>&1 &
     #cru d verysync
     #cru a verysync "*/10 * * * * sh $KSROOT/scripts/verysync_config.sh"
 
