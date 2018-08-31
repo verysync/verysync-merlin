@@ -8,6 +8,8 @@ eval `dbus export verysync_`
 conf_Path="$KSROOT/verysync/config"
 export HOME=/root
 
+alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
+
 create_conf(){
     if [ ! -d $verysync_home ];then
         $KSROOT/verysync/verysync -generate="$verysync_home/.verysync" >>/tmp/verysync.log
@@ -46,7 +48,7 @@ start_verysync(){
 		sleep 1
 	done
     dbus set verysync_webui=$weburl
-    echo_date v2ray启动成功，pid：$VSPID
+    echo_date verysync启动成功，pid：$VSPID
 
 
 }
@@ -89,6 +91,6 @@ stop)
 	else
         stop_verysync
     fi
-    http_response '设置已保存！切勿重复提交！页面将在3秒后刷新'
+    logger  '设置已保存！切勿重复提交！页面将在3秒后刷新'
 	;;
 esac
