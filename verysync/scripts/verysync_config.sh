@@ -1,11 +1,11 @@
 #!/bin/sh
-#2017/05/05 by kenney
+#2017/05/05 by verysync
 #version 0.2
 
 export KSROOT=/koolshare
 source $KSROOT/scripts/base.sh
 eval `dbus export verysync_`
-conf_Path="$KSROOT/verysync/config"
+
 export HOME=/root
 
 alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
@@ -28,9 +28,6 @@ get_ipaddr(){
 }
 
 start_verysync(){
-    if [ ! -L "/koolshare/init.d/S97verysync.sh" ]; then
-        ln -sf "/koolshare/scripts/verysync_config.sh" "/koolshare/init.d/S97verysync.sh"
-    fi
     export GOGC=30
     dbus set verysync_version=`/koolshare/verysync/verysync -version|awk '{print $2}'`
     $KSROOT/verysync/verysync -home="$verysync_home/.verysync" -gui-address $ipaddr >/dev/null 2>&1 &
