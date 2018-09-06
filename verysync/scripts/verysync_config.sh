@@ -39,9 +39,14 @@ setup_iptables() {
 	done
 }
 
+setup_optimize() {
+    echo 204800 > /proc/sys/fs/inotify/max_user_watches
+}
+
 start_verysync(){
     export GOGC=30
     setup_iptables
+    setup_optimize
     dbus set verysync_version=`/koolshare/verysync/verysync -version|awk '{print $2}'`
     $KSROOT/verysync/verysync -home="$verysync_home/.verysync" -gui-address $ipaddr >/dev/null 2>&1 &
     #cru d verysync
