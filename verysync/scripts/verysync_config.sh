@@ -41,12 +41,30 @@ setup_iptables() {
 
 setup_optimize() {
     echo 204800 > /proc/sys/fs/inotify/max_user_watches
+    
+    setup_swap
+}
+
+
+setup_swap() {
+    local swapfile="$verysync_home/.verysync/swapfile"
+    if [[ ! -f "$swapfile" ]]; then
+        dd if=/dev/zero of="$swapfile" count=512 bs=1M
+        chmod 600 "$swapfile"
+        mkswap "$swapfile"
+    fi
+
+    if [[ -f "$swapfile" ]]; then
+        swapon "$swapfile"
+    fi
 }
 
 start_verysync(){
     export GOGC=30
+
     setup_iptables
     setup_optimize
+
     dbus set verysync_version=`/koolshare/verysync/verysync -version|awk '{print $2}'`
     $KSROOT/verysync/verysync -home="$verysync_home/.verysync" -gui-address $ipaddr >/dev/null 2>&1 &
     #cru d verysync
