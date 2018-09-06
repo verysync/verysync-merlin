@@ -41,14 +41,13 @@ setup_iptables() {
 
 setup_optimize() {
     echo 204800 > /proc/sys/fs/inotify/max_user_watches
-    
+
     setup_swap
 }
 
-
 setup_swap() {
     local swapfile="$verysync_home/.verysync/swapfile"
-    if [[ ! -f "$swapfile" ]]; then
+    if [[ ! -f "$swapfile" -a "$verysync_swap_enable" == "1" ]]; then
         dd if=/dev/zero of="$swapfile" count=512 bs=1M
         chmod 600 "$swapfile"
         mkswap "$swapfile"
@@ -88,20 +87,35 @@ start_verysync(){
 
 
 }
+
 stop_verysync(){
     killall verysync
     sleep 1
     dbus set verysync_webui="-"
 }
 
+update_disklist() {
+    dbus set verysync_disklist=`df -h $1  | grep mnt| awk '
+        BEGIN { ORS = ""; print " [ "}
+        /Filesystem/ {next}
+        { printf "%s{\"name\": \"%s\", \"size\": \"%s\", \"usage\": \"%s\", \"free\": \"%s\", \"mount_point\": \"%s\"}",
+              separator, $1, $2, $3, $4, $6
+          separator = ", "
+        }
+        END { print " ] " }
+    '`
+}
+
 case $ACTION in
 start)
     if [ "$verysync_home" = "" ]; then
+        update_disklist
         logger "[软件中心]: 微力同步 您还未设置应用数据目录"
         exit 1
     fi
     mkdir -p "$verysync_home"
     if [[ $? -ne 0 ]]; then
+        update_disklist
         logger "[软件中心]: 微力同步 您设置的应用数据目录${verysync_home}/.verysync 无法创建，请检查路径的有效性"
         exit 1
     fi
@@ -112,6 +126,7 @@ start)
         get_ipaddr
         start_verysync
     else
+        update_disklist
 		logger "[软件中心]: 微力同步未设置开启,跳过！"
 	fi
 	;;
@@ -127,6 +142,7 @@ stop)
 	else
         stop_verysync
     fi
+    update_disklist
     logger  '设置已保存！切勿重复提交！页面将在3秒后刷新'
 	;;
 esac

@@ -39,12 +39,19 @@ function done_validating() {
 }
 
 function buildswitch() {
-	$("#switch").click(
-	function() {
+	$("#switch").click(function() {
 		if (document.getElementById('switch').checked) {
 			document.form.verysync_enable.value = 1;
 		} else {
 			document.form.verysync_enable.value = 0;
+		}
+	});
+
+	$("#swap_enable").click(function() {
+		if (document.getElementById('swap_enable').checked) {
+			document.form.verysync_swap_enable.value = "1";
+		} else {
+			document.form.verysync_swap_enable.value = "0";
 		}
 	});
 }
@@ -73,7 +80,7 @@ function conf2obj() {
 		dataType: "script",
 		success: function(xhr) {
 			var p = "verysync";
-			var params = ["enabled", "port", "wan_enable", "home"];
+			var params = ["enabled", "port", "wan_enable", "home", "swap_enable"];
 			for (var i = 0; i < params.length; i++) {
 				if (db_verysync[p + "_" + params[i]]) {
 					$("#verysync_" + params[i]).val(db_verysync[p + "_" + params[i]]);
@@ -85,6 +92,18 @@ function conf2obj() {
 			} else {
 				rrt.checked = true;
 			}
+
+			$('#swap_enable').attr("checked", db_verysync["verysync_swap_enable"] == "1");
+
+			var verysync_disklist = <% dbus_get_def("verysync_disklist", "[]"); %>
+			$.each(verysync_disklist, function(key, item){
+				var option = $("<option></option>")
+								.attr("value", item.mount_point)
+								.text(item.mount_point+" 大小:"+item.size + " 可用:"+item.free)
+				$('#verysync_home').append(option);
+			});
+
+			$('#verysync_home').val(db_verysync["verysync_home"])
 		}
 	});
 }
@@ -125,6 +144,7 @@ function verifyFields(focused, quiet){
 	<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="verysync_config.sh"/>
 	<input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
 	<input type="hidden" id="verysync_enable" name="verysync_enable" value='<% dbus_get_def("verysync_enable", "0"); %>'/>
+	<input type="hidden" id="verysync_swap_enable" name="verysync_swap_enable" value='<% dbus_get_def("verysync_swap_enable", "0"); %>'/>
 	<table class="content" align="center" cellpadding="0" cellspacing="0">
 		<tr>
 			<td width="17">&nbsp;</td>
@@ -194,11 +214,6 @@ function verifyFields(focused, quiet){
 													<a  href="http://<% nvram_get("lan_ipaddr_rt");%>:<% dbus_get_def("verysync_port", "8886");%>" target="_blank">http://<% nvram_get("lan_ipaddr_rt");%>:<% dbus_get_def("verysync_port", "8886");%></a>
 												</td>
 											</tr>
-											<tr>
-												<td colspan="2">
-													<span style="float: left;">微力运行过程有可能占用较多内存，开启SWAP分区会更稳定，如果您已开启，请忽略此提示</span>
-												</td>
-											</tr>
                                     	</table>
 										<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="verysync_detail">
 											<thead>
@@ -226,10 +241,20 @@ function verifyFields(focused, quiet){
                                             <tr>
 												<th>应用数据目录</th>
 												<td>
-													<input type="text" name="verysync_home" id="verysync_home" class="input_ss_table"  value="" />
+													<!-- <input type="text" name="verysync_home" id="verysync_home" class="input_ss_table"  value="" /> -->
+													<select name="verysync_home" id="verysync_home">
+													<option>选择数据目录</option>
+													</select>
 													<br />
-													<span>请指定硬盘路径，索引会占用较大的空间 建议设置为磁盘根目录 比如 /tmp/mnt/sda1/<span>
-													<span>设定后如果修改该路径，同步的任务列表将重置<span>
+													<span>请指定硬盘路径，索引会占用较大的空间 建议设置为磁盘根目录,设定后如果修改该路径，同步的任务列表将重置</span>
+												</td>
+											</tr>
+											<tr>
+												<th>启用虚拟内存</th>
+												<td>
+													<input id="swap_enable" type="checkbox" />
+													<br />
+													<span style="float: left;">第一次启用初始化需要花费较多的时间，微力会自动创建512M的SWAP空间，第一次请多等待些许时间</span>
 												</td>
 											</tr>
 										</table>

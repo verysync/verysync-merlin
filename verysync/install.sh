@@ -2,7 +2,7 @@
 export KSROOT=/koolshare
 source $KSROOT/scripts/base.sh
 
-PACKAGE_VERSION=0.0.5
+PACKAGE_VERSION=0.0.6
 
 mkdir -p $KSROOT/init.d
 mkdir -p /tmp/upload
@@ -31,5 +31,16 @@ rm -rf $KSROOT/install.sh
 # fi
 
 #dbus set verysync_version=`/koolshare/verysync/verysync -version|awk '{print $2}'`
+
+dbus set verysync_disklist=`df -h $1  | grep mnt| awk '
+    BEGIN { ORS = ""; print " [ "}
+    /Filesystem/ {next}
+    { printf "%s{\"name\": \"%s\", \"size\": \"%s\", \"usage\": \"%s\", \"free\": \"%s\", \"mount_point\": \"%s\"}",
+          separator, $1, $2, $3, $4, $6
+      separator = ", "
+    }
+    END { print " ] " }
+'`
+
 
 # sh $KSROOT/scripts/verysync_config.sh start
