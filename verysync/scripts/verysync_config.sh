@@ -27,8 +27,21 @@ get_ipaddr(){
     # sed -i "/<gui enabled/{n;s/[0-9.]\{7,15\}:[0-9]\{2,5\}/$ipaddr/g}" $conf_Path/config.xml
 }
 
+setup_iptables() {
+	local ports="tcp:$verysync_port tcp:22330 udp:22331"
+	for item in $ports; do
+		local proto=${item%:*}
+		local port=${item#*:}
+		local rule="INPUT -p $proto --dport $port -j ACCEPT"
+		if ! iptables -C $rule >/dev/null; then
+			iptables -I $rule
+		fi
+	done
+}
+
 start_verysync(){
     export GOGC=30
+    setup_iptables
     dbus set verysync_version=`/koolshare/verysync/verysync -version|awk '{print $2}'`
     $KSROOT/verysync/verysync -home="$verysync_home/.verysync" -gui-address $ipaddr >/dev/null 2>&1 &
     #cru d verysync

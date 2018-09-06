@@ -183,6 +183,7 @@ function verifyFields(focused, quiet){
 															</div>
 														</label>
 													</div>
+													<span style="float: left;">安装包版本: <% dbus_get_def("softcenter_module_verysync_version", "-"); %></span>
 													<span style="float: left;">微力版本: <% dbus_get_def("verysync_version", "-"); %></span>
 												</td>
 											</tr>
