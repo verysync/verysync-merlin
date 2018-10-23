@@ -113,7 +113,7 @@ start)
         logger "[软件中心]: 微力同步 您还未设置应用数据目录"
         exit 1
     fi
-    mkdir -p "$verysync_home"
+    mkdir -p "$verysync_home/.verysync"
     if [[ $? -ne 0 ]]; then
         update_disklist
         logger "[软件中心]: 微力同步 您设置的应用数据目录${verysync_home}/.verysync 无法创建，请检查路径的有效性"

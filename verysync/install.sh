@@ -2,7 +2,7 @@
 export KSROOT=/koolshare
 source $KSROOT/scripts/base.sh
 
-PACKAGE_VERSION=0.0.6
+PACKAGE_VERSION=0.0.7
 
 mkdir -p $KSROOT/init.d
 mkdir -p /tmp/upload
